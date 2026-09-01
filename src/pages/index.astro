@@ -1,17 +1,37 @@
 ---
-
+// ここでプロフィール情報を定義
+const name = "松本 美風";
+const affiliation = "兵庫県立大学 大学院情報科学研究科 大島研究室";
+const grade = "修士1年";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{name}のポートフォリオ</title>
+  </head>
+  <body>
+    <main>
+      <h1>{name}</h1>
+      <p><strong>所属：</strong>{affiliation}</p>
+      <p><strong>学年：</strong>{grade}</p>
+
+      <section>
+        <h2>研究テーマ</h2>
+        <p>ここに研究テーマや興味のある分野を記述します。</p>
+      </section>
+
+      <section>
+        <h2>連絡先・リンク</h2>
+        <ul>
+          <!-- <li>Email:</li> -->
+          <li>GitHub: <a href="https://github.com/pineF">GitHubプロフィール</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
 </html>
