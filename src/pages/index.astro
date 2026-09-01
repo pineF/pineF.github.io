@@ -1,37 +1,1213 @@
 ---
-// ここでプロフィール情報を定義
-const name = "松本 美風";
-const affiliation = "兵庫県立大学 大学院情報科学研究科 大島研究室";
-const grade = "修士1年";
+// プロフィール情報・リンクの定義
+const profile = {
+  nameJa: "松本 美風",
+  nameEn: "Mifu Matsumoto",
+  // プロフィール写真：GitHubのアバター画像 (または public/profile.jpg などに差し替え可能)
+  avatarImage: "/icon.jpg",
+  affiliationJa: "兵庫県立大学 大学院情報科学研究科 大島研究室",
+  affiliationEn: "Oshima Lab, Graduate School of Information Science, University of Hyogo",
+  // 研究室Webサイトリンク
+  labUrl: "https://ohshimalab.github.io/",
+  grade: "修士1年 (Master's 1st Year)",
+  status: "Exploring Natural Language Processing & Information Extraction",
+  location: "Kobe, Japan",
+  email: "matsumoto@example.com", // 必要に応じて変更してください
+  github: "https://github.com/pineF",
+  // 今後追加可能なリンク
+  // x: "https://x.com/your_handle",
+  // scholar: "https://scholar.google.com/...",
+};
+
+// 研究分野・興味キーワード（絵文字を排除しアカデミックに整理）
+const researchTopics = [
+  { name: "自然言語処理", en: "Natural Language Processing" },
+  { name: "情報抽出", en: "Information Extraction" },
+  { name: "大規模言語モデル", en: "Large Language Models" },
+];
+
+// 技術スタック・ツール
+const techStack = [
+  { name: "Python", category: "Language" },
+  { name: "PyTorch", category: "ML/NLP" },
+  { name: "Hugging Face", category: "ML/NLP" },
+  { name: "TypeScript", category: "Language" },
+  { name: "Astro", category: "Web" },
+  { name: "FastAPI", category: "Backend" },
+  { name: "Git / GitHub", category: "Tools" },
+  { name: "LaTeX", category: "Academic" },
+];
+
+// 学会発表・論文などの業績データ
+const publications = [
+//   {
+//     id: "pub-2026-01",
+//     type: "国内学会",
+//     year: "2026",
+//     title: "Webテキストからの構造化情報抽出に向けた大規模言語モデルの活用",
+//     authors: "松本 美風, 指導教員名",
+//     conference: "第〇〇回 言語処理学会年次大会 (NLP2026), 2026年3月.",
+//     paperUrl: "#", // 論文PDFリンク (無ければ空文字または#)
+//     slidesUrl: "", // スライドリンク
+//     bibtex: `@inproceedings{matsumoto2026nlp,
+//   author    = {松本 美風 and 指導教員名},
+//   title     = {Webテキストからの構造化情報抽出に向けた大規模言語モデルの活用},
+//   booktitle = {第〇〇回 言語処理学会年次大会 (NLP2026)},
+//   year      = {2026}
+// }`,
+//   },
+];
+
+// 経歴 / Education (縦並び)
+const timeline = [
+  {
+    period: "2026年 4月 - 現在",
+    title: "兵庫県立大学 大学院情報科学研究科",
+    sub: "博士前期課程 在学（大島研究室）",
+    current: true,
+  },
+  {
+    period: "2022年 4月 - 2026年 3月",
+    title: "兵庫県立大学",
+    sub: "卒業（学士）",
+    current: false,
+  },
+];
 ---
 
-<html lang="ja">
+<html lang="ja" class="dark">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>{name}のポートフォリオ</title>
+    <title>{profile.nameJa} ({profile.nameEn}) | Portfolio</title>
+    <meta
+      name="description"
+      content={`${profile.nameJa} (${profile.nameEn}) - ${profile.affiliationJa}の研究・ポートフォリオサイト`}
+    />
+
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Sans JP, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <main>
-      <h1>{name}</h1>
-      <p><strong>所属：</strong>{affiliation}</p>
-      <p><strong>学年：</strong>{grade}</p>
+    <!-- 背景アンビエントデコレーション -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="bg-grid-pattern"></div>
 
-      <section>
-        <h2>研究テーマ</h2>
-        <p>ここに研究テーマや興味のある分野を記述します。</p>
-      </section>
+    <div class="site-wrapper">
+      <!-- フローティングヘッダー -->
+      <header class="navbar">
+        <div class="nav-brand">
+          <span class="brand-monogram">P</span>
+          <span class="brand-name">Portfolio</span>
+        </div>
+        <div class="nav-actions">
+          <button id="theme-toggle" class="icon-btn" aria-label="テーマ切り替え" title="ダーク/ライト切り替え">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </header>
 
-      <section>
-        <h2>連絡先・リンク</h2>
-        <ul>
-          <!-- <li>Email:</li> -->
-          <li>GitHub: <a href="https://github.com/pineF">GitHubプロフィール</a></li>
-        </ul>
-      </section>
-    </main>
+      <!-- メインの Bento Grid レイアウト -->
+      <main class="bento-container">
+        
+        <!-- CARD 1: Hero & Profile (2カラムスパン) -->
+        <section class="bento-card bento-hero">
+          <div class="hero-top">
+            <div class="avatar-ring">
+              <div class="avatar-inner">
+                {profile.avatarImage ? (
+                  <img
+                    src={profile.avatarImage}
+                    alt={profile.nameJa}
+                    class="avatar-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                  />
+                  <span class="avatar-fallback" style="display:none;">松</span>
+                ) : (
+                  <span class="avatar-char">松</span>
+                )}
+              </div>
+              <div class="status-indicator-pulse" title="現在アクティブに研究中"></div>
+            </div>
+            <div class="hero-tags">
+              <span class="status-pill">
+                <span class="pulse-dot"></span>
+                {profile.grade}
+              </span>
+              <span class="status-pill secondary">
+                📍 {profile.location}
+              </span>
+            </div>
+          </div>
+
+          <div class="hero-main">
+            <div class="name-group">
+              <h1 class="hero-name">{profile.nameJa}</h1>
+              <span class="hero-en">{profile.nameEn}</span>
+            </div>
+            
+            <div class="hero-affiliation-row">
+              <span class="affiliation-text">{profile.affiliationJa}</span>
+              {profile.labUrl && (
+                <a href={profile.labUrl} target="_blank" rel="noopener noreferrer" class="lab-link" title="大島研究室のWebサイトを開く">
+                  <span>Lab Web</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+              )}
+            </div>
+
+            <p class="hero-statement">
+              あはは
+            </p>
+          </div>
+
+          <div class="hero-footer">
+            <div class="contact-links">
+              <a href={profile.github} target="_blank" rel="noopener noreferrer" class="action-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                <span>GitHub</span>
+              </a>
+              {profile.email && (
+                <a href={`mailto:${profile.email}`} class="action-btn primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                  <span>Contact</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <!-- CARD 2: Research Interests (1カラム) -->
+        <section class="bento-card bento-research">
+          <div class="card-header">
+            <span class="card-category">Focus</span>
+            <h2 class="card-title">研究テーマ / Interests</h2>
+          </div>
+          <p class="research-desc">
+            大規模言語モデル（LLM）の空間理解、地図理解に関する研究を行っています。
+          </p>
+          <div class="topics-grid">
+            {researchTopics.map((topic) => (
+              <div class="topic-chip">
+                <span class="topic-bullet"></span>
+                <div class="topic-text">
+                  <span class="topic-ja">{topic.name}</span>
+                  <span class="topic-en">{topic.en}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- CARD 3: Publications & Research Output (2カラムスパン) -->
+        <section class="bento-card bento-pubs">
+          <div class="card-header flex-between">
+            <div>
+              <span class="card-category">Academic Output</span>
+              <h2 class="card-title">発表・業績 / Publications</h2>
+            </div>
+            <span class="count-badge">{publications.length} 件</span>
+          </div>
+
+          <div class="pub-list-container">
+            {publications.length > 0 ? (
+              <div class="pub-list">
+                {publications.map((pub) => (
+                  <article class="pub-card" id={pub.id}>
+                    <div class="pub-meta-top">
+                      <span class="pub-badge">{pub.type}</span>
+                      <span class="pub-year">{pub.year}</span>
+                    </div>
+                    <h3 class="pub-title">{pub.title}</h3>
+                    <p class="pub-authors">{pub.authors}</p>
+                    <p class="pub-conf">{pub.conference}</p>
+
+                    <div class="pub-actions">
+                      {pub.paperUrl && pub.paperUrl !== "#" && (
+                        <a href={pub.paperUrl} target="_blank" rel="noopener noreferrer" class="mini-btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                          Paper
+                        </a>
+                      )}
+                      {pub.slidesUrl && (
+                        <a href={pub.slidesUrl} target="_blank" rel="noopener noreferrer" class="mini-btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                          Slides
+                        </a>
+                      )}
+                      {pub.bibtex && (
+                        <button class="mini-btn bibtex-btn" data-bibtex={pub.bibtex} title="BibTeXをコピー">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                          <span>BibTeX</span>
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div class="empty-state">
+                <p>現在準備中です。</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <!-- CARD 4: Tech Stack (1カラム) -->
+        <section class="bento-card bento-tech">
+          <div class="card-header">
+            <span class="card-category">Toolkit</span>
+            <h2 class="card-title">技術スタック / Tech Stack</h2>
+          </div>
+          <div class="tech-tags">
+            {techStack.map((tech) => (
+              <span class="tech-tag">
+                <span class="tech-dot"></span>
+                {tech.name}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <!-- CARD 5: Timeline & Education (縦並び・全幅3カラム) -->
+        <section class="bento-card bento-timeline">
+          <div class="card-header">
+            <span class="card-category">History</span>
+            <h2 class="card-title">略歴 / Education</h2>
+          </div>
+          <ol class="vertical-timeline">
+            {timeline.map((item) => (
+              <li class={`timeline-item ${item.current ? "current" : ""}`}>
+                <div class="timeline-marker">
+                  <span class="marker-dot"></span>
+                  <span class="marker-line"></span>
+                </div>
+                <div class="timeline-content">
+                  <time class="timeline-period">{item.period}</time>
+                  <h3 class="timeline-heading">{item.title}</h3>
+                  <p class="timeline-description">{item.sub}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+      </main>
+
+      <!-- フッター -->
+      <footer class="site-footer">
+        <div class="footer-content">
+          <p class="copyright">
+            &copy; 2026 <strong>{profile.nameJa} ({profile.nameEn})</strong>. All rights reserved.
+          </p>
+          <p class="footer-meta">
+            Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> &amp; Hosted on GitHub Pages.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- トースト通知 -->
+    <div id="toast" class="toast-notification">BibTeX をクリップボードにコピーしました！</div>
+
+    <!-- インタラクション用スクリプト -->
+    <script>
+      // 1. ダーク/ライトモード切り替え
+      const themeToggle = document.getElementById("theme-toggle");
+      const html = document.documentElement;
+
+      // 初期テーマの判定 (ローカルストレージ or OS設定)
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme) {
+        html.className = savedTheme;
+      } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+        html.className = "light";
+      } else {
+        html.className = "dark";
+      }
+
+      themeToggle?.addEventListener("click", () => {
+        const isDark = html.classList.contains("dark");
+        const nextTheme = isDark ? "light" : "dark";
+        html.className = nextTheme;
+        localStorage.setItem("theme", nextTheme);
+      });
+
+      // 2. BibTeX コピー機能 & トースト表示
+      const bibtexButtons = document.querySelectorAll<HTMLButtonElement>(".bibtex-btn");
+      const toast = document.getElementById("toast");
+
+      bibtexButtons.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const bibtex = btn.dataset.bibtex;
+          if (!bibtex) return;
+
+          try {
+            await navigator.clipboard.writeText(bibtex);
+            showToast("BibTeX をクリップボードにコピーしました！");
+          } catch (err) {
+            console.error("Copy failed", err);
+          }
+        });
+      });
+
+      function showToast(msg: string) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2600);
+      }
+    </script>
   </body>
 </html>
+
+<style is:global>
+  /* ==========================================================================
+     CSS Variables & Theme Tokens
+     ========================================================================== */
+  :root {
+    --font-sans: 'Plus Jakarta Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Light Mode */
+    --bg-base: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --border-color: rgba(226, 232, 240, 0.85);
+    
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+
+    --accent-primary: #4f46e5;
+    --accent-secondary: #06b6d4;
+    --accent-emerald: #10b981;
+    --accent-glow-1: rgba(99, 102, 241, 0.08);
+    --accent-glow-2: rgba(6, 182, 212, 0.08);
+
+    --tag-bg: #f1f5f9;
+    --tag-border: #e2e8f0;
+    --card-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  html.dark {
+    /* Dark Mode (Default) */
+    --bg-base: #090d16;
+    --bg-card: rgba(17, 24, 39, 0.75);
+    --border-color: rgba(255, 255, 255, 0.08);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #64748b;
+
+    --accent-primary: #6366f1;
+    --accent-secondary: #38bdf8;
+    --accent-emerald: #34d399;
+    --accent-glow-1: rgba(99, 102, 241, 0.12);
+    --accent-glow-2: rgba(56, 189, 248, 0.08);
+
+    --tag-bg: rgba(255, 255, 255, 0.035);
+    --tag-border: rgba(255, 255, 255, 0.07);
+    --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
+
+  /* 背景アンビエント演出（静的なソフトグロー） */
+  .bg-grid-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .ambient-glow {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-1 {
+    top: -100px;
+    left: 10%;
+    background: var(--accent-glow-1);
+  }
+
+  .glow-2 {
+    bottom: 5%;
+    right: 5%;
+    background: var(--accent-glow-2);
+  }
+
+  .site-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* ==========================================================================
+     Navbar
+     ========================================================================== */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    margin-bottom: 2.5rem;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .brand-monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+
+  .brand-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .icon-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+    transform: scale(1.08);
+  }
+
+  html.dark .sun-icon { display: block; }
+  html.dark .moon-icon { display: none; }
+  html.light .sun-icon { display: none; }
+  html.light .moon-icon { display: block; }
+
+  /* ==========================================================================
+     Bento Grid Layout
+     ========================================================================== */
+  .bento-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .bento-card {
+    position: relative;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--card-shadow);
+  }
+
+  /* Card Placement */
+  .bento-hero {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .bento-research {
+    grid-column: span 1;
+  }
+
+  .bento-pubs {
+    grid-column: span 2;
+  }
+
+  .bento-tech {
+    grid-column: span 1;
+  }
+
+  .bento-timeline {
+    grid-column: span 3;
+  }
+
+  /* ==========================================================================
+     Card 1: Hero & Profile
+     ========================================================================== */
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .avatar-ring {
+    position: relative;
+    width: 68px;
+    height: 68px;
+    padding: 3px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 50%;
+  }
+
+  .avatar-inner {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-base);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    overflow: hidden;
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .avatar-fallback,
+  .avatar-char {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .status-indicator-pulse {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    background-color: var(--accent-emerald);
+    border: 2px solid var(--bg-card);
+    border-radius: 50%;
+  }
+
+  .hero-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    padding: 0.3rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+  }
+
+  .status-pill.secondary {
+    color: var(--text-secondary);
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-emerald);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-emerald);
+  }
+
+  .name-group {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-name {
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-en {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  /* 所属 ＋ 研究室リンク */
+  .hero-affiliation-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 0.4rem 0 1rem;
+  }
+
+  .affiliation-text {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .lab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    color: var(--accent-primary);
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .lab-link:hover {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-glow-1);
+    transform: translateY(-1px);
+  }
+
+  .hero-statement {
+    font-size: 0.98rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 1.75rem 0;
+    max-width: 90%;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    background: var(--tag-bg);
+    color: var(--text-primary);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .action-btn:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .action-btn.primary {
+    background: linear-gradient(135deg, var(--accent-primary), #4338ca);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  }
+
+  .action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+  }
+
+  /* ==========================================================================
+     Common Card Headers
+     ========================================================================== */
+  .card-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .card-header.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-category {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: var(--accent-primary);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .count-badge {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    color: var(--text-secondary);
+  }
+
+  /* ==========================================================================
+     Card 2: Research Interests (絵文字なし・クリーンな箇条書きチップ)
+     ========================================================================== */
+  .research-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 0 1.25rem 0;
+  }
+
+  .topics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .topic-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 10px;
+  }
+
+  .topic-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-primary);
+    flex-shrink: 0;
+  }
+
+  .topic-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topic-ja {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .topic-en {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  /* ==========================================================================
+     Card 3: Publications
+     ========================================================================== */
+  .pub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .pub-card {
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+
+  .pub-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pub-badge {
+    background: var(--accent-glow-1);
+    color: var(--accent-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+
+  .pub-year {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .pub-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 0.4rem 0;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .pub-authors {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .pub-conf {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .pub-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .mini-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .mini-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  /* ==========================================================================
+     Card 4: Tech Stack
+     ========================================================================== */
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tech-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .tech-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-secondary);
+    border-radius: 50%;
+  }
+
+  /* ==========================================================================
+     Card 5: Vertical Timeline
+     ========================================================================== */
+  .vertical-timeline {
+    list-style: none;
+    padding: 0.5rem 0 0 0;
+    margin: 1.5rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeline-item {
+    position: relative;
+    display: flex;
+    gap: 1.25rem;
+    padding-bottom: 2rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 16px;
+  }
+
+  .marker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+    border: 2px solid var(--bg-card);
+    z-index: 2;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+
+  .timeline-item.current .marker-dot {
+    background-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px var(--accent-glow-1);
+  }
+
+  .marker-line {
+    width: 2px;
+    flex-grow: 1;
+    background-color: var(--border-color);
+    margin-top: 0.25rem;
+  }
+
+  .timeline-item:last-child .marker-line {
+    display: none;
+  }
+
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-top: 0.05rem;
+  }
+
+  .timeline-period {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+  }
+
+  .timeline-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .timeline-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* ==========================================================================
+     Footer
+     ========================================================================== */
+  .site-footer {
+    margin-top: 4rem;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 2rem;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .copyright strong {
+    color: var(--text-secondary);
+  }
+
+  .footer-meta a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer-meta a:hover {
+    text-decoration: underline;
+  }
+
+  /* ==========================================================================
+     Toast Notification
+     ========================================================================== */
+  .toast-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+  }
+
+  .toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ==========================================================================
+     Responsive Design
+     ========================================================================== */
+  @media (max-width: 900px) {
+    .bento-container {
+      grid-template-columns: 1fr;
+    }
+
+    .bento-hero,
+    .bento-research,
+    .bento-pubs,
+    .bento-tech,
+    .bento-timeline {
+      grid-column: span 1;
+    }
+
+    .hero-name {
+      font-size: 1.9rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-wrapper {
+      padding: 1rem 1rem 3rem;
+    }
+
+    .navbar {
+      border-radius: 16px;
+      padding: 0.75rem 1rem;
+    }
+
+    .bento-card {
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+
+    .hero-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .contact-links {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>
