@@ -1,4 +1,7 @@
 ---
+import Header from '../components/Header.astro';
+import FishBackground from '../components/FishBackground.astro';
+
 // プロフィール情報・リンクの定義
 const profile = {
   nameJa: "松本 美風",
@@ -40,22 +43,24 @@ const techStack = [
 
 // 学会発表・論文などの業績データ
 const publications = [
-//   {
-//     id: "pub-2026-01",
-//     type: "国内学会",
-//     year: "2026",
-//     title: "Webテキストからの構造化情報抽出に向けた大規模言語モデルの活用",
-//     authors: "松本 美風, 指導教員名",
-//     conference: "第〇〇回 言語処理学会年次大会 (NLP2026), 2026年3月.",
-//     paperUrl: "#", // 論文PDFリンク (無ければ空文字または#)
-//     slidesUrl: "", // スライドリンク
-//     bibtex: `@inproceedings{matsumoto2026nlp,
-//   author    = {松本 美風 and 指導教員名},
-//   title     = {Webテキストからの構造化情報抽出に向けた大規模言語モデルの活用},
-//   booktitle = {第〇〇回 言語処理学会年次大会 (NLP2026)},
-//   year      = {2026}
-// }`,
-//   },
+  {
+    id: "pub-2026-deim",
+    type: "国内学会",
+    year: "2026",
+    title: "空間情報の抽象化に基づくLLM活用による道案内の目印地物特定と説明文生成",
+    authors: "松本 美風, 中西 勇輝, 橋口 友哉, 大島 裕明",
+    conference: "第18回データ工学と情報マネジメントに関するフォーラム (DEIM2026), 2K-02, 2026年2月.",
+    paperUrl: "https://pub-files.atlas.jp/fs/public/deim2026/ver_29/abstract/ja/2K-02.pdf",
+    presentationUrl: "https://pub.confit.atlas.jp/ja/event/deim2026/presentation/2K-02",
+    slidesUrl: "",
+    bibtex: `@inproceedings{matsumoto2026deim,
+  author    = {松本 美風 and 中西 勇輝 and 橋口 友哉 and 大島 裕明},
+  title     = {空間情報の抽象化に基づくLLM活用による道案内の目印地物特定と説明文生成},
+  booktitle = {第18回データ工学と情報マネジメントに関するフォーラム (DEIM2026)},
+  year      = {2026},
+  number    = {2K-02}
+}`,
+  },
 ];
 
 // 経歴 / Education (縦並び)
@@ -97,31 +102,21 @@ const timeline = [
     />
   </head>
   <body>
-    <!-- 背景アンビエントデコレーション -->
+    <!-- 背景アンビエントデコレーション & 魚のアニメーション -->
+    <FishBackground />
     <div class="ambient-glow glow-1"></div>
     <div class="ambient-glow glow-2"></div>
     <div class="bg-grid-pattern"></div>
 
     <div class="site-wrapper">
       <!-- フローティングヘッダー -->
-      <header class="navbar">
-        <div class="nav-brand">
-          <span class="brand-monogram">P</span>
-          <span class="brand-name">Portfolio</span>
-        </div>
-        <div class="nav-actions">
-          <button id="theme-toggle" class="icon-btn" aria-label="テーマ切り替え" title="ダーク/ライト切り替え">
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          </button>
-        </div>
-      </header>
+      <Header brandName={profile.nameJa} githubUrl={profile.github} />
 
       <!-- メインの Bento Grid レイアウト -->
       <main class="bento-container">
         
         <!-- CARD 1: Hero & Profile (2カラムスパン) -->
-        <section class="bento-card bento-hero">
+        <section class="bento-card bento-hero" id="about">
           <div class="hero-top">
             <div class="avatar-ring">
               <div class="avatar-inner">
@@ -188,7 +183,7 @@ const timeline = [
         </section>
 
         <!-- CARD 2: Research Interests (1カラム) -->
-        <section class="bento-card bento-research">
+        <section class="bento-card bento-research" id="research">
           <div class="card-header">
             <span class="card-category">Focus</span>
             <h2 class="card-title">研究テーマ / Interests</h2>
@@ -210,7 +205,7 @@ const timeline = [
         </section>
 
         <!-- CARD 3: Publications & Research Output (2カラムスパン) -->
-        <section class="bento-card bento-pubs">
+        <section class="bento-card bento-pubs" id="publications">
           <div class="card-header flex-between">
             <div>
               <span class="card-category">Academic Output</span>
@@ -239,6 +234,12 @@ const timeline = [
                           Paper
                         </a>
                       )}
+                      {pub.presentationUrl && (
+                        <a href={pub.presentationUrl} target="_blank" rel="noopener noreferrer" class="mini-btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                          DEIM Page
+                        </a>
+                      )}
                       {pub.slidesUrl && (
                         <a href={pub.slidesUrl} target="_blank" rel="noopener noreferrer" class="mini-btn">
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
@@ -264,7 +265,7 @@ const timeline = [
         </section>
 
         <!-- CARD 4: Tech Stack (1カラム) -->
-        <section class="bento-card bento-tech">
+        <section class="bento-card bento-tech" id="tech">
           <div class="card-header">
             <span class="card-category">Toolkit</span>
             <h2 class="card-title">技術スタック / Tech Stack</h2>
@@ -280,7 +281,7 @@ const timeline = [
         </section>
 
         <!-- CARD 5: Timeline & Education (縦並び・全幅3カラム) -->
-        <section class="bento-card bento-timeline">
+        <section class="bento-card bento-timeline" id="timeline">
           <div class="card-header">
             <span class="card-category">History</span>
             <h2 class="card-title">略歴 / Education</h2>
@@ -422,6 +423,10 @@ const timeline = [
     --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -479,83 +484,8 @@ const timeline = [
     z-index: 1;
     max-width: 1080px;
     margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
+    padding: 1.5rem 1.5rem 4rem;
   }
-
-  /* ==========================================================================
-     Navbar
-     ========================================================================== */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    margin-bottom: 2.5rem;
-    background: var(--bg-card);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    box-shadow: var(--card-shadow);
-  }
-
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .brand-monogram {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    color: white;
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 0.8rem;
-    border-radius: 6px;
-  }
-
-  .brand-name {
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    color: var(--text-primary);
-  }
-
-  .nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .icon-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    background: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .icon-btn:hover {
-    color: var(--text-primary);
-    border-color: var(--text-muted);
-    transform: scale(1.08);
-  }
-
-  html.dark .sun-icon { display: block; }
-  html.dark .moon-icon { display: none; }
-  html.light .sun-icon { display: none; }
-  html.light .moon-icon { display: block; }
 
   /* ==========================================================================
      Bento Grid Layout
@@ -575,6 +505,7 @@ const timeline = [
     border-radius: 20px;
     padding: 2rem;
     box-shadow: var(--card-shadow);
+    scroll-margin-top: 5.5rem;
   }
 
   /* Card Placement */
@@ -1182,11 +1113,6 @@ const timeline = [
   @media (max-width: 600px) {
     .site-wrapper {
       padding: 1rem 1rem 3rem;
-    }
-
-    .navbar {
-      border-radius: 16px;
-      padding: 0.75rem 1rem;
     }
 
     .bento-card {

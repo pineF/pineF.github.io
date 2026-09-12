@@ -1,0 +1,317 @@
+---
+// 背景で魚が優雅に泳ぐCanvasコンポーネント
+---
+
+<canvas id="fish-canvas" class="fish-canvas" aria-hidden="true"></canvas>
+
+<style>
+  .fish-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
+
+<script>
+  // 魚と気泡のシミュレーション
+  (function initFishCanvas() {
+    const canvas = document.getElementById("fish-canvas") as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    let mouse = { x: -1000, y: -1000, active: false };
+
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    });
+
+    window.addEventListener("mouseleave", () => {
+      mouse.active = false;
+      mouse.x = -1000;
+      mouse.y = -1000;
+    });
+
+    // カラーパレット定義
+    const darkColors = [
+      { body: "rgba(56, 189, 248, 0.45)", fin: "rgba(14, 165, 233, 0.3)", glow: "rgba(56, 189, 248, 0.2)" }, // Sky
+      { body: "rgba(99, 102, 241, 0.45)", fin: "rgba(79, 70, 229, 0.3)", glow: "rgba(99, 102, 241, 0.2)" }, // Indigo
+      { body: "rgba(52, 211, 153, 0.4)", fin: "rgba(16, 185, 129, 0.25)", glow: "rgba(52, 211, 153, 0.2)" }, // Emerald
+      { body: "rgba(244, 114, 182, 0.35)", fin: "rgba(236, 72, 153, 0.25)", glow: "rgba(244, 114, 182, 0.15)" }, // Pink
+      { body: "rgba(167, 139, 250, 0.4)", fin: "rgba(139, 92, 246, 0.25)", glow: "rgba(167, 139, 250, 0.2)" }, // Purple
+    ];
+
+    const lightColors = [
+      { body: "rgba(2, 132, 199, 0.25)", fin: "rgba(3, 105, 161, 0.15)", glow: "rgba(2, 132, 199, 0.08)" },
+      { body: "rgba(79, 70, 229, 0.22)", fin: "rgba(67, 56, 202, 0.15)", glow: "rgba(79, 70, 229, 0.08)" },
+      { body: "rgba(13, 148, 136, 0.22)", fin: "rgba(15, 118, 110, 0.15)", glow: "rgba(13, 148, 136, 0.08)" },
+      { body: "rgba(219, 39, 119, 0.2)", fin: "rgba(190, 24, 93, 0.12)", glow: "rgba(219, 39, 119, 0.06)" },
+    ];
+
+    function isDarkMode() {
+      return document.documentElement.classList.contains("dark");
+    }
+
+    // 魚クラス
+    class Fish {
+      x: number;
+      y: number;
+      size: number;
+      baseSpeed: number;
+      speed: number;
+      angle: number;
+      targetAngle: number;
+      turnSpeed: number;
+      tailAngle: number;
+      tailSpeed: number;
+      colorIndex: number;
+      swimPhase: number;
+      frightTimer: number;
+
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        // サイズのバリエーション (深度感を出す)
+        this.size = 12 + Math.random() * 20; // 12px 〜 32px
+        this.baseSpeed = (35 - this.size) * 0.05 + 0.6; // 小さい魚ほど少し速い
+        this.speed = this.baseSpeed;
+        this.angle = Math.random() * Math.PI * 2;
+        this.targetAngle = this.angle;
+        this.turnSpeed = 0.02 + Math.random() * 0.02;
+        this.tailAngle = 0;
+        this.tailSpeed = 0.12 + Math.random() * 0.08;
+        this.colorIndex = Math.floor(Math.random() * darkColors.length);
+        this.swimPhase = Math.random() * Math.PI * 2;
+        this.frightTimer = 0;
+      }
+
+      update() {
+        this.swimPhase += this.tailSpeed * (this.speed / this.baseSpeed);
+        this.tailAngle = Math.sin(this.swimPhase) * 0.45;
+
+        // 定期的に目標進行方向を緩やかに変化させる
+        if (Math.random() < 0.015) {
+          this.targetAngle += (Math.random() - 0.5) * 1.5;
+        }
+
+        // 画面端からの回避・旋回
+        const margin = 80;
+        if (this.x < margin) this.targetAngle = 0;
+        else if (this.x > width - margin) this.targetAngle = Math.PI;
+        if (this.y < margin) this.targetAngle = Math.PI / 2;
+        else if (this.y > height - margin) this.targetAngle = -Math.PI / 2;
+
+        // マウス回避インタラクション
+        if (mouse.active) {
+          const dx = this.x - mouse.x;
+          const dy = this.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const avoidRadius = 140;
+
+          if (dist < avoidRadius && dist > 0) {
+            // マウスの反対方向へ素早く逃げる
+            this.targetAngle = Math.atan2(dy, dx);
+            this.speed = this.baseSpeed * 2.2;
+            this.frightTimer = 40;
+          }
+        }
+
+        if (this.frightTimer > 0) {
+          this.frightTimer--;
+          if (this.frightTimer === 0) {
+            this.speed = this.baseSpeed;
+          }
+        } else {
+          // 通常時の速度に戻す
+          this.speed += (this.baseSpeed - this.speed) * 0.05;
+        }
+
+        // 角度の滑らかな補間 (最短方向へ回転)
+        let diff = this.targetAngle - this.angle;
+        diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+        this.angle += diff * this.turnSpeed;
+
+        // 位置の更新
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+
+        // 画面外に大きく出た場合の安全マージン
+        if (this.x < -60) this.x = width + 60;
+        if (this.x > width + 60) this.x = -60;
+        if (this.y < -60) this.y = height + 60;
+        if (this.y > height + 60) this.y = -60;
+      }
+
+      draw(context: CanvasRenderingContext2D, dark: boolean) {
+        const palette = dark
+          ? darkColors[this.colorIndex % darkColors.length]
+          : lightColors[this.colorIndex % lightColors.length];
+
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.angle);
+
+        const s = this.size;
+
+        // 魚の体 (滑らかな曲線)
+        context.beginPath();
+        context.moveTo(s * 0.9, 0); // 口
+        // 背中のライン
+        context.quadraticCurveTo(s * 0.2, -s * 0.38, -s * 0.6, -s * 0.1);
+        // 尾の付け根へ
+        context.lineTo(-s * 0.85, 0);
+        // 腹部のライン
+        context.lineTo(-s * 0.6, s * 0.1);
+        context.quadraticCurveTo(s * 0.2, s * 0.38, s * 0.9, 0);
+        context.closePath();
+
+        // 塗り
+        context.fillStyle = palette.body;
+        context.fill();
+
+        // 胸ビレ (Pectoral Fin)
+        context.beginPath();
+        context.moveTo(s * 0.1, s * 0.1);
+        context.quadraticCurveTo(0, s * 0.45, -s * 0.3, s * 0.35);
+        context.quadraticCurveTo(-s * 0.1, s * 0.2, s * 0.1, s * 0.1);
+        context.fillStyle = palette.fin;
+        context.fill();
+
+        // 背ビレ (Dorsal Fin)
+        context.beginPath();
+        context.moveTo(s * 0.1, -s * 0.3);
+        context.quadraticCurveTo(-s * 0.2, -s * 0.55, -s * 0.45, -s * 0.2);
+        context.fillStyle = palette.fin;
+        context.fill();
+
+        // 尾ビレ (Tail Fin) - ゆらゆら動く
+        context.save();
+        context.translate(-s * 0.85, 0);
+        context.rotate(this.tailAngle);
+
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.quadraticCurveTo(-s * 0.4, -s * 0.45, -s * 0.65, -s * 0.35);
+        context.quadraticCurveTo(-s * 0.45, 0, -s * 0.65, s * 0.35);
+        context.quadraticCurveTo(-s * 0.4, s * 0.45, 0, 0);
+        context.closePath();
+
+        context.fillStyle = palette.fin;
+        context.fill();
+        context.restore();
+
+        // 目
+        context.beginPath();
+        context.arc(s * 0.6, -s * 0.08, Math.max(1.2, s * 0.06), 0, Math.PI * 2);
+        context.fillStyle = dark ? "rgba(255, 255, 255, 0.7)" : "rgba(15, 23, 42, 0.5)";
+        context.fill();
+
+        context.restore();
+      }
+    }
+
+    // 気泡クラス
+    class Bubble {
+      x: number;
+      y: number;
+      size: number;
+      speed: number;
+      wobbleSpeed: number;
+      wobbleOffset: number;
+      opacity: number;
+
+      constructor(customX?: number, customY?: number) {
+        this.x = customX ?? Math.random() * width;
+        this.y = customY ?? height + Math.random() * 50;
+        this.size = 1.5 + Math.random() * 3.5;
+        this.speed = 0.4 + Math.random() * 0.8;
+        this.wobbleSpeed = 0.03 + Math.random() * 0.04;
+        this.wobbleOffset = Math.random() * Math.PI * 2;
+        this.opacity = 0.15 + Math.random() * 0.25;
+      }
+
+      update() {
+        this.y -= this.speed;
+        this.wobbleOffset += this.wobbleSpeed;
+        this.x += Math.sin(this.wobbleOffset) * 0.4;
+
+        if (this.y < -20) {
+          this.y = height + 20;
+          this.x = Math.random() * width;
+        }
+      }
+
+      draw(context: CanvasRenderingContext2D, dark: boolean) {
+        context.beginPath();
+        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.strokeStyle = dark
+          ? `rgba(186, 230, 253, ${this.opacity})`
+          : `rgba(14, 165, 233, ${this.opacity * 0.7})`;
+        context.lineWidth = 1;
+        context.stroke();
+
+        // ハイライト
+        context.beginPath();
+        context.arc(this.x - this.size * 0.3, this.y - this.size * 0.3, this.size * 0.25, 0, Math.PI * 2);
+        context.fillStyle = dark
+          ? `rgba(255, 255, 255, ${this.opacity * 1.2})`
+          : `rgba(255, 255, 255, ${this.opacity * 0.8})`;
+        context.fill();
+      }
+    }
+
+    // 魚と気泡のインスタンス生成
+    // 画面の広さに応じて匹数を調整 (8〜16匹程度)
+    const fishCount = Math.max(8, Math.min(18, Math.floor(window.innerWidth / 110)));
+    const fishes: Fish[] = Array.from({ length: fishCount }, () => new Fish());
+
+    const bubbleCount = 20;
+    const bubbles: Bubble[] = Array.from({ length: bubbleCount }, () => new Bubble());
+
+    // アニメーションループ
+    let animationFrameId: number;
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      const dark = isDarkMode();
+
+      // 気泡の更新・描画
+      for (const bubble of bubbles) {
+        bubble.update();
+        bubble.draw(ctx, dark);
+      }
+
+      // 魚の更新・描画 (奥の小さい魚から順に描画して深度感を出す)
+      fishes.sort((a, b) => a.size - b.size);
+      for (const fish of fishes) {
+        fish.update();
+        fish.draw(ctx, dark);
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // クリーンアップ
+    document.addEventListener("astro:before-swap", () => {
+      cancelAnimationFrame(animationFrameId);
+    });
+  })();
+</script>
+
