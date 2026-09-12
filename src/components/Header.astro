@@ -20,6 +20,15 @@ const navItems = [
     <div class="nav-left">
       <a href="#" class="nav-brand" title="ページトップへ">
         <span class="brand-monogram">P</span>
+        <span class="brand-fish-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 64 64" fill="none">
+            <path d="M14 32 C8 20, 4 16, 2 14 C4 24, 4 40, 2 50 C4 48, 8 44, 14 32 Z" fill="currentColor" opacity="0.85" />
+            <path d="M30 20 C34 10, 42 12, 44 18 C38 18, 33 19, 30 20 Z" fill="currentColor" opacity="0.85" />
+            <path d="M28 44 C32 52, 38 50, 40 46 C35 45, 31 44, 28 44 Z" fill="currentColor" opacity="0.85" />
+            <path d="M12 32 C18 18, 36 14, 52 24 C58 28, 62 32, 62 32 C62 32, 58 36, 52 40 C36 50, 18 46, 12 32 Z" fill="currentColor" />
+            <circle cx="50" cy="28" r="3" fill="var(--bg-card)" />
+          </svg>
+        </span>
         <span class="brand-name">{brandName}</span>
       </a>
     </div>
@@ -103,6 +112,7 @@ const navItems = [
   }
 
   .brand-monogram {
+  .brand-fish-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -114,6 +124,13 @@ const navItems = [
     font-weight: 700;
     font-size: 0.8rem;
     border-radius: 6px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--accent-glow-1);
+    transition: transform 0.2s ease;
+  }
+
+  .nav-brand:hover .brand-fish-icon {
+    transform: rotate(-10deg) scale(1.08);
   }
 
   .brand-name {
